@@ -16,8 +16,9 @@ using JuMP
 
 @testset "IEEE13 wye only" begin
     m = Model(HiGHS.Optimizer)
+    dss_path = joinpath("data", "ieee13", "IEEE13Nodeckt.dss")
     p = Inputs(
-        joinpath("data", "ieee13", "IEEE13Nodeckt.dss")
+        dss_path
     )
     
 end

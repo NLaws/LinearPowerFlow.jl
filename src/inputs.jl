@@ -104,17 +104,30 @@ end
 
 parse all inputs from an OpenDSS model, including:
 - nodal admittance matrix
-- Sbase
-- Vbase
 - Pload
 - Qload
 """
-function Inputs(dss_path::String)
+function Inputs(dss_path::String; Sbase=1e6, Vbase=12470)
     dss("Redirect $dss_path")
     dss("Solve")  # is calcv enough to get Y ?
 
     if !(OpenDSSDirect.Solution.Converged() == true)
         @warn "OpenDSS solution is not converged for $dss_path"
     end
+
+    Y = OpenDSSDirect.YMatrix.getYsparse()
+    ynames = OpenDSSDirect.Circuit.YNodeOrder()
+
+    # TODO is it safe to assume that the Vsource is the first three nodes?
+
+    d = let d
+        with_logger(SimpleLogger(Error)) do  # lots of info from parse_dss
+            open(dss_path) do io
+                parse_dss(io)  # method from PowerModelsDistribution
+            end
+        end
+    end
+    Pload, Qload = dss_loads(d)
+
 
 end
