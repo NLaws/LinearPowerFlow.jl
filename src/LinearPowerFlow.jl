@@ -2,9 +2,10 @@ module LinearPowerFlow
 
 using JuMP
 using LinearAlgebra
+using OpenDSSDirect
 
-include("./types.jl")
 include("./io.jl")
+include("./inputs.jl")
 include("./utils.jl")
 include("./model.jl")
 

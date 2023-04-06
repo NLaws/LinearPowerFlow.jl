@@ -98,3 +98,23 @@ mutable struct Inputs
         )
     end
 end
+
+
+"""
+
+parse all inputs from an OpenDSS model, including:
+- nodal admittance matrix
+- Sbase
+- Vbase
+- Pload
+- Qload
+"""
+function Inputs(dss_path::String)
+    dss("Redirect $dss_path")
+    dss("Solve")  # is calcv enough to get Y ?
+
+    if !(OpenDSSDirect.Solution.Converged() == true)
+        @warn "OpenDSS solution is not converged for $dss_path"
+    end
+
+end

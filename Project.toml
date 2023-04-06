@@ -3,6 +3,11 @@ uuid = "065002bc-66a7-4ca6-850a-9d9c9ecf15c6"
 authors = ["Nick Laws <laws.nick@gmail.com> and contributors"]
 version = "0.1.0"
 
+[deps]
+JuMP = "4076af6c-e467-56ae-b986-b466b2749572"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+OpenDSSDirect = "a8b11937-1041-50f2-9818-136bb7a8fb06"
+
 [compat]
 julia = "1.7"
 
