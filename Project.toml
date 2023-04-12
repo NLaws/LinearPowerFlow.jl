@@ -11,6 +11,7 @@ Logging = "56ddb016-857b-54e1-b83d-db4d58db5568"
 OpenDSSDirect = "a8b11937-1041-50f2-9818-136bb7a8fb06"
 
 [compat]
+BranchFlowModel = "0.1"
 julia = "1.7"
 
 [extras]
