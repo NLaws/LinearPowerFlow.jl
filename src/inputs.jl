@@ -115,8 +115,40 @@ function Inputs(dss_path::String; Sbase=1e6, Vbase=12470)
         @warn "OpenDSS solution is not converged for $dss_path"
     end
 
+    # Assuming source nodes are the first three at this point
+    # This is not a valid assumption later and may be violated here
+    source_nodes = OpenDSSDirect.Circuit.YNodeOrder()[1:3]
+
+
+    V = Dict()
+    for (i, node) in enumerate(OpenDSSDirect.Circuit.YNodeOrder())
+        V[node] = OpenDSSDirect.Circuit.YNodeVArray()[i]
+
+    end
+
+    dss("Vsource.source.enabled=False")
+    for regulator in OpenDSSDirect.RegControls.AllNames()
+        dss("regcontrol.$(regulator).enabled = False")
+    end
+    for load in OpenDSSDirect.Loads.AllNames()
+        dss("Load.$(load).enabled = False")
+    end
+
+    dss("Solve")
+
+    ynames = []
+    source_node_indices = []
+    for (i, node) in enumerate(OpenDSSDirect.Circuit.YNodeOrder())
+        if (node in source_nodes)
+            push!(source_node_indices, i)
+        else
+            push!(ynames,node)
+        end
+    end
+
+
     Y = OpenDSSDirect.YMatrix.getYsparse()
-    ynames = OpenDSSDirect.Circuit.YNodeOrder()
+
 
     # TODO is it safe to assume that the Vsource is the first three nodes?
 
@@ -126,7 +158,7 @@ function Inputs(dss_path::String; Sbase=1e6, Vbase=12470)
                 parse_dss(io)  # method from PowerModelsDistribution
             end
         end
-    end
+    end    
     Pload, Qload = dss_loads(d)
 
 
